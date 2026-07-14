@@ -1,0 +1,810 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum UserStatus {
+
+  ACTIVE
+
+  INACTIVE
+
+  SUSPENDED
+
+}
+
+
+enum BranchStatus {
+
+ACTIVE
+
+INACTIVE
+
+}
+
+enum RouteStatus {
+
+ACTIVE
+
+INACTIVE
+
+}
+
+enum VehicleStatus {
+
+ACTIVE
+
+MAINTENANCE
+
+OUT_OF_SERVICE
+
+RETIRED
+
+}
+
+enum DriverStatus {
+
+ACTIVE
+
+ON_LEAVE
+
+SUSPENDED
+
+RETIRED
+
+}
+
+enum ScheduleStatus {
+
+SCHEDULED
+
+BOARDING
+
+DEPARTED
+
+ARRIVED
+
+CANCELLED
+
+}
+
+enum SeatClass {
+
+STANDARD
+
+VIP
+
+}
+
+
+enum SeatStatus {
+
+AVAILABLE
+
+HELD
+
+BOOKED
+
+BLOCKED
+
+}
+
+enum Gender {
+
+MALE
+
+FEMALE
+
+}
+
+
+enum BookingStatus {
+
+PENDING
+
+CONFIRMED
+
+CANCELLED
+
+EXPIRED
+
+COMPLETED
+
+}
+
+
+
+enum PaymentMethod {
+
+CASH
+
+BANK
+
+TELEBIRR
+
+CBE_BIRR
+
+CHAPA
+
+CARD
+
+}
+
+enum PaymentStatus {
+
+PENDING
+
+SUCCESS
+
+FAILED
+
+REFUNDED
+
+}
+
+enum TicketStatus {
+
+ACTIVE
+
+USED
+
+CANCELLED
+
+EXPIRED
+
+}
+
+
+
+
+enum RefundStatus {
+
+PENDING
+
+APPROVED
+
+REJECTED
+
+COMPLETED
+
+} 
+
+
+
+enum NotificationChannel {
+
+SMS
+
+EMAIL
+
+PUSH
+
+}
+
+enum NotificationStatus {
+
+PENDING
+
+SENT
+
+FAILED
+
+}
+ 
+ 
+model Role {
+  id          BigInt @id @default(autoincrement())
+
+  name        String @unique
+
+  description String?
+
+  users        User[]
+  permissions  RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+} 
+
+model Permission {
+
+  id BigInt @id @default(autoincrement())
+
+  name String @unique
+
+  description String?
+
+  roles RolePermission[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+}
+
+model RolePermission {
+
+  roleId BigInt
+
+  permissionId BigInt
+
+  role Role
+      @relation(
+        fields:[roleId],
+        references:[id],
+        onDelete: Cascade
+      )
+
+  permission Permission
+      @relation(
+        fields:[permissionId],
+        references:[id],
+        onDelete: Cascade
+      )
+
+  @@id([roleId, permissionId])
+}
+
+model User {
+
+  id BigInt @id @default(autoincrement())
+
+  roleId BigInt
+
+  branchId BigInt
+
+  firstName String
+
+  lastName String
+
+  phoneNumber String @unique
+
+  email String @unique
+
+  passwordHash String
+
+  status UserStatus @default(ACTIVE)
+
+  lastLogin DateTime?
+
+  role Role
+      @relation(
+          fields:[roleId],
+          references:[id]
+      )
+
+  branch Branch
+      @relation(
+          fields:[branchId],
+          references:[id]
+      )
+
+  auditLogs AuditLog[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+
+  @@index([phoneNumber])
+
+}
+
+
+
+model City {
+
+  id BigInt @id @default(autoincrement())
+
+  name String
+
+  region String
+
+  country String
+
+  originRoutes Route[] @relation("OriginCity")
+
+  destinationRoutes Route[] @relation("DestinationCity")
+
+  branches Branch[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, region])
+
+}
+
+model Branch {
+
+  id BigInt @id @default(autoincrement())
+
+  cityId BigInt
+
+  name String
+
+  address String
+
+  phone String
+
+  managerName String?
+
+  status BranchStatus @default(ACTIVE)
+
+  city City
+      @relation(
+        fields:[cityId],
+        references:[id]
+      )
+
+  users User[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+}
+
+
+model Route {
+
+  id BigInt @id @default(autoincrement())
+
+  originCityId BigInt
+
+  destinationCityId BigInt
+
+  distanceKm Decimal
+
+  estimatedDuration Int
+
+  basePrice Decimal
+
+  status RouteStatus @default(ACTIVE)
+
+  originCity City
+      @relation(
+        "OriginCity",
+        fields:[originCityId],
+        references:[id]
+      )
+
+  destinationCity City
+      @relation(
+        "DestinationCity",
+        fields:[destinationCityId],
+        references:[id]
+      )
+
+  schedules Schedule[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+}
+
+
+model VehicleType {
+
+  id BigInt @id @default(autoincrement())
+
+  name String @unique
+
+  description String?
+
+  capacity Int
+
+  vehicles Vehicle[]
+
+  seats Seat[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+}
+
+model Vehicle {
+
+  id BigInt @id @default(autoincrement())
+
+  vehicleNumber String @unique
+
+  plateNumber String @unique
+
+  vehicleTypeId BigInt
+
+  model String
+
+  status VehicleStatus @default(ACTIVE)
+
+  vehicleType VehicleType
+      @relation(
+        fields:[vehicleTypeId],
+        references:[id]
+      )
+
+  schedules Schedule[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@index([plateNumber])
+
+}
+
+
+
+model Driver {
+
+  id BigInt @id @default(autoincrement())
+
+  fullName String
+
+  licenseNumber String @unique
+
+  phone String @unique
+
+  status DriverStatus @default(ACTIVE)
+
+  schedules Schedule[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+}
+
+
+
+model Schedule {
+
+  id BigInt @id @default(autoincrement())
+
+  routeId BigInt
+
+  vehicleId BigInt
+
+  driverId BigInt
+
+  departureDateTime DateTime
+
+  arrivalDateTime DateTime
+
+  price Decimal
+
+  status ScheduleStatus @default(SCHEDULED)
+
+  route Route
+      @relation(
+        fields:[routeId],
+        references:[id]
+      )
+
+  vehicle Vehicle
+      @relation(
+        fields:[vehicleId],
+        references:[id]
+      )
+
+  driver Driver
+      @relation(
+        fields:[driverId],
+        references:[id]
+      )
+
+  scheduleSeats ScheduleSeat[]
+
+  bookings Booking[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@index([departureDateTime])
+
+}
+
+
+model Seat {
+
+  id BigInt @id @default(autoincrement())
+
+  vehicleTypeId BigInt
+
+  seatNumber String
+
+  seatClass SeatClass
+
+  vehicleType VehicleType
+      @relation(
+        fields:[vehicleTypeId],
+        references:[id]
+      )
+
+  scheduleSeats ScheduleSeat[]
+
+  @@unique([vehicleTypeId, seatNumber])
+
+}
+
+
+
+model ScheduleSeat {
+
+  id BigInt @id @default(autoincrement())
+
+  scheduleId BigInt
+
+  seatId BigInt
+
+  status SeatStatus @default(AVAILABLE)
+
+  schedule Schedule
+      @relation(
+        fields:[scheduleId],
+        references:[id]
+      )
+
+  seat Seat
+      @relation(
+        fields:[seatId],
+        references:[id]
+      )
+
+  bookingSeats BookingSeat[]
+
+  @@unique([scheduleId, seatId])
+
+}
+
+
+
+model Passenger {
+
+  id BigInt @id @default(autoincrement())
+
+  fullName String
+
+  phone String @unique
+
+  email String?
+
+  gender Gender
+
+  nationalId String? @unique
+
+  bookings Booking[]
+
+  notifications Notification[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+}
+
+
+
+model Booking {
+
+  id BigInt @id @default(autoincrement())
+
+  bookingReference String @unique
+
+  passengerId BigInt
+
+  scheduleId BigInt
+
+  bookingStatus BookingStatus @default(PENDING)
+
+  totalAmount Decimal
+
+  expiresAt DateTime?
+
+  passenger Passenger
+      @relation(
+        fields:[passengerId],
+        references:[id]
+      )
+
+  schedule Schedule
+      @relation(
+        fields:[scheduleId],
+        references:[id]
+      )
+
+  bookingSeats BookingSeat[]
+
+  payment Payment?
+
+  ticket Ticket?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@index([bookingReference])
+
+}
+
+
+model BookingSeat {
+
+  bookingId BigInt
+
+  scheduleSeatId BigInt
+
+  fare Decimal
+
+  booking Booking
+      @relation(
+        fields:[bookingId],
+        references:[id],
+        onDelete: Cascade
+      )
+
+  scheduleSeat ScheduleSeat
+      @relation(
+        fields:[scheduleSeatId],
+        references:[id],
+        onDelete: Cascade
+      )
+
+  @@id([bookingId, scheduleSeatId])
+
+}
+
+model Payment {
+
+  id BigInt @id @default(autoincrement())
+
+  bookingId BigInt @unique
+
+  paymentMethod PaymentMethod
+
+  transactionReference String @unique
+
+  amount Decimal
+
+  paymentStatus PaymentStatus @default(PENDING)
+
+  paidAt DateTime?
+
+  booking Booking
+      @relation(
+        fields:[bookingId],
+        references:[id]
+      )
+
+  refund Refund?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+}
+
+
+
+model Ticket {
+
+  id BigInt @id @default(autoincrement())
+
+  bookingId BigInt @unique
+
+  ticketNumber String @unique
+
+  qrCode String
+
+  issuedAt DateTime @default(now())
+
+  ticketStatus TicketStatus @default(ACTIVE)
+
+  booking Booking
+      @relation(
+        fields:[bookingId],
+        references:[id]
+      )
+
+  createdAt DateTime @default(now())
+
+}
+
+
+
+model Refund {
+
+  id BigInt @id @default(autoincrement())
+
+  paymentId BigInt @unique
+
+  refundAmount Decimal
+
+  refundReason String
+
+  refundStatus RefundStatus @default(PENDING)
+
+  processedAt DateTime?
+
+  payment Payment
+      @relation(
+        fields:[paymentId],
+        references:[id]
+      )
+
+  createdAt DateTime @default(now())
+
+}
+
+
+
+model Notification {
+
+  id BigInt @id @default(autoincrement())
+
+  passengerId BigInt
+
+  channel NotificationChannel
+
+  title String
+
+  message String
+
+  status NotificationStatus @default(PENDING)
+
+  sentAt DateTime?
+
+  passenger Passenger
+      @relation(
+        fields:[passengerId],
+        references:[id]
+      )
+
+  createdAt DateTime @default(now())
+
+}
+
+
+model AuditLog {
+
+  id BigInt @id @default(autoincrement())
+
+  userId BigInt
+
+  action String
+
+  entityName String
+
+  entityId BigInt
+
+  ipAddress String?
+
+  user User
+      @relation(
+        fields:[userId],
+        references:[id]
+      )
+
+  createdAt DateTime @default(now())
+
+  @@index([entityName])
+
+  @@index([entityId])
+
+}
