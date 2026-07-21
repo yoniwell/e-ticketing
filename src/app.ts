@@ -1,4 +1,6 @@
 import express from 'express';
+import routes from "./modules/routes/index.js";
+
 import { requestLogger } from './middleware/requestLogger.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
@@ -7,7 +9,11 @@ import { asyncHandler } from './common/utils/index.js';
 
 import { ResponseBuilder } from './common/responses/index.js';
 
+
 const app = express();
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +25,10 @@ const app = express();
 app.use(express.json());
 
 app.use(requestLogger);
+
+app.use("/api", routes);
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +52,8 @@ app.get(
     throw new AppError('Async error works!', 500);
   }),
 );
+
+
 
 app.use(errorHandler);
 

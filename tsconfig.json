@@ -11,8 +11,8 @@
      "lib": ["es2020"],
     // Other Outputs
     "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    "declaration": false,
+    "declarationMap": false,
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
@@ -39,6 +39,7 @@
 
   },"include": [
   "src",
+  "prisma",
   "prisma.config.ts"
 ]
 }

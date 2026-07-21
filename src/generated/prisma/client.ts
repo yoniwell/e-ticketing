@@ -29,8 +29,8 @@ export * from "./enums.js"
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Roles
+ * const roles = await prisma.role.findMany()
  * ```
  * 
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
@@ -44,4 +44,108 @@ export { Prisma }
 path.join(__dirname, "query_engine-windows.dll.node")
 path.join(process.cwd(), "src/generated/prisma/query_engine-windows.dll.node")
 
-
+/**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel
+/**
+ * Model RolePermission
+ * 
+ */
+export type RolePermission = Prisma.RolePermissionModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
+ * Model City
+ * 
+ */
+export type City = Prisma.CityModel
+/**
+ * Model Branch
+ * 
+ */
+export type Branch = Prisma.BranchModel
+/**
+ * Model Route
+ * 
+ */
+export type Route = Prisma.RouteModel
+/**
+ * Model VehicleType
+ * 
+ */
+export type VehicleType = Prisma.VehicleTypeModel
+/**
+ * Model Vehicle
+ * 
+ */
+export type Vehicle = Prisma.VehicleModel
+/**
+ * Model Driver
+ * 
+ */
+export type Driver = Prisma.DriverModel
+/**
+ * Model Schedule
+ * 
+ */
+export type Schedule = Prisma.ScheduleModel
+/**
+ * Model Seat
+ * 
+ */
+export type Seat = Prisma.SeatModel
+/**
+ * Model ScheduleSeat
+ * 
+ */
+export type ScheduleSeat = Prisma.ScheduleSeatModel
+/**
+ * Model Passenger
+ * 
+ */
+export type Passenger = Prisma.PassengerModel
+/**
+ * Model Booking
+ * 
+ */
+export type Booking = Prisma.BookingModel
+/**
+ * Model BookingSeat
+ * 
+ */
+export type BookingSeat = Prisma.BookingSeatModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model Ticket
+ * 
+ */
+export type Ticket = Prisma.TicketModel
+/**
+ * Model Refund
+ * 
+ */
+export type Refund = Prisma.RefundModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel

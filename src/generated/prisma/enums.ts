@@ -9,7 +9,154 @@
 * 🟢 You can import this file directly.
 */
 
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  SUSPENDED: 'SUSPENDED'
+} as const
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const BranchStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type BranchStatus = (typeof BranchStatus)[keyof typeof BranchStatus]
+
+
+export const RouteStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type RouteStatus = (typeof RouteStatus)[keyof typeof RouteStatus]
+
+
+export const VehicleStatus = {
+  ACTIVE: 'ACTIVE',
+  MAINTENANCE: 'MAINTENANCE',
+  OUT_OF_SERVICE: 'OUT_OF_SERVICE',
+  RETIRED: 'RETIRED'
+} as const
+
+export type VehicleStatus = (typeof VehicleStatus)[keyof typeof VehicleStatus]
+
+
+export const DriverStatus = {
+  ACTIVE: 'ACTIVE',
+  ON_LEAVE: 'ON_LEAVE',
+  SUSPENDED: 'SUSPENDED',
+  RETIRED: 'RETIRED'
+} as const
+
+export type DriverStatus = (typeof DriverStatus)[keyof typeof DriverStatus]
+
+
+export const ScheduleStatus = {
+  SCHEDULED: 'SCHEDULED',
+  BOARDING: 'BOARDING',
+  DEPARTED: 'DEPARTED',
+  ARRIVED: 'ARRIVED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ScheduleStatus = (typeof ScheduleStatus)[keyof typeof ScheduleStatus]
+
+
+export const SeatClass = {
+  STANDARD: 'STANDARD',
+  VIP: 'VIP'
+} as const
+
+export type SeatClass = (typeof SeatClass)[keyof typeof SeatClass]
+
+
+export const SeatStatus = {
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  BOOKED: 'BOOKED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type SeatStatus = (typeof SeatStatus)[keyof typeof SeatStatus]
+
+
+export const Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const BookingStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
+
+
+export const PaymentMethod = {
+  CASH: 'CASH',
+  BANK: 'BANK',
+  TELEBIRR: 'TELEBIRR',
+  CBE_BIRR: 'CBE_BIRR',
+  CHAPA: 'CHAPA',
+  CARD: 'CARD'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const TicketStatus = {
+  ACTIVE: 'ACTIVE',
+  USED: 'USED',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus]
+
+
+export const RefundStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type RefundStatus = (typeof RefundStatus)[keyof typeof RefundStatus]
+
+
+export const NotificationChannel = {
+  SMS: 'SMS',
+  EMAIL: 'EMAIL',
+  PUSH: 'PUSH'
+} as const
+
+export type NotificationChannel = (typeof NotificationChannel)[keyof typeof NotificationChannel]
+
+
+export const NotificationStatus = {
+  PENDING: 'PENDING',
+  SENT: 'SENT',
+  FAILED: 'FAILED'
+} as const
+
+export type NotificationStatus = (typeof NotificationStatus)[keyof typeof NotificationStatus]

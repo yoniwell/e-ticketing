@@ -239,20 +239,10 @@ model RolePermission {
 
   permissionId BigInt
 
-  role Role
-      @relation(
-        fields:[roleId],
-        references:[id],
-        onDelete: Cascade
-      )
+  role Role @relation(fields:[roleId],references:[id],onDelete: Cascade)
 
-  permission Permission
-      @relation(
-        fields:[permissionId],
-        references:[id],
-        onDelete: Cascade
-      )
-
+  permission Permission @relation(fields:[permissionId], references:[id], onDelete: Cascade)
+        
   @@id([roleId, permissionId])
 }
 
@@ -278,17 +268,9 @@ model User {
 
   lastLogin DateTime?
 
-  role Role
-      @relation(
-          fields:[roleId],
-          references:[id]
-      )
+  role Role @relation(fields:[roleId],references:[id] )
 
-  branch Branch
-      @relation(
-          fields:[branchId],
-          references:[id]
-      )
+  branch Branch @relation(fields:[branchId], references:[id])
 
   auditLogs AuditLog[]
 
@@ -301,8 +283,6 @@ model User {
   @@index([phoneNumber])
 
 }
-
-
 
 model City {
 
@@ -344,11 +324,7 @@ model Branch {
 
   status BranchStatus @default(ACTIVE)
 
-  city City
-      @relation(
-        fields:[cityId],
-        references:[id]
-      )
+  city City   @relation(      fields:[cityId],     references:[id]  )
 
   users User[]
 
@@ -375,19 +351,9 @@ model Route {
 
   status RouteStatus @default(ACTIVE)
 
-  originCity City
-      @relation(
-        "OriginCity",
-        fields:[originCityId],
-        references:[id]
-      )
+  originCity City  @relation(   "OriginCity",   fields:[originCityId],   references:[id]     )
 
-  destinationCity City
-      @relation(
-        "DestinationCity",
-        fields:[destinationCityId],
-        references:[id]
-      )
+  destinationCity City @relation(  "DestinationCity", fields:[destinationCityId], references:[id]   )
 
   schedules Schedule[]
 
@@ -432,11 +398,7 @@ model Vehicle {
 
   status VehicleStatus @default(ACTIVE)
 
-  vehicleType VehicleType
-      @relation(
-        fields:[vehicleTypeId],
-        references:[id]
-      )
+  vehicleType VehicleType    @relation(    fields:[vehicleTypeId],     references:[id] )
 
   schedules Schedule[]
 
@@ -490,23 +452,11 @@ model Schedule {
 
   status ScheduleStatus @default(SCHEDULED)
 
-  route Route
-      @relation(
-        fields:[routeId],
-        references:[id]
-      )
+  route Route@relation(  fields:[routeId],     references:[id]  )
 
-  vehicle Vehicle
-      @relation(
-        fields:[vehicleId],
-        references:[id]
-      )
+  vehicle Vehicle@relation( fields:[vehicleId],   references:[id] )
 
-  driver Driver
-      @relation(
-        fields:[driverId],
-        references:[id]
-      )
+  driver Driver @relation( fields:[driverId], references:[id] )
 
   scheduleSeats ScheduleSeat[]
 
@@ -531,11 +481,7 @@ model Seat {
 
   seatClass SeatClass
 
-  vehicleType VehicleType
-      @relation(
-        fields:[vehicleTypeId],
-        references:[id]
-      )
+  vehicleType VehicleType  @relation( fields:[vehicleTypeId],  references:[id] )
 
   scheduleSeats ScheduleSeat[]
 
@@ -555,17 +501,9 @@ model ScheduleSeat {
 
   status SeatStatus @default(AVAILABLE)
 
-  schedule Schedule
-      @relation(
-        fields:[scheduleId],
-        references:[id]
-      )
+  schedule Schedule@relation( fields:[scheduleId],  references:[id])
 
-  seat Seat
-      @relation(
-        fields:[seatId],
-        references:[id]
-      )
+  seat Seat @relation( fields:[seatId], references:[id])
 
   bookingSeats BookingSeat[]
 
@@ -617,17 +555,9 @@ model Booking {
 
   expiresAt DateTime?
 
-  passenger Passenger
-      @relation(
-        fields:[passengerId],
-        references:[id]
-      )
+  passenger Passenger @relation(fields:[passengerId], references:[id])
 
-  schedule Schedule
-      @relation(
-        fields:[scheduleId],
-        references:[id]
-      )
+  schedule Schedule@relation( fields:[scheduleId],  references:[id])
 
   bookingSeats BookingSeat[]
 
@@ -652,19 +582,9 @@ model BookingSeat {
 
   fare Decimal
 
-  booking Booking
-      @relation(
-        fields:[bookingId],
-        references:[id],
-        onDelete: Cascade
-      )
+  booking Booking @relation(fields:[bookingId],  references:[id],    onDelete: Cascade)
 
-  scheduleSeat ScheduleSeat
-      @relation(
-        fields:[scheduleSeatId],
-        references:[id],
-        onDelete: Cascade
-      )
+  scheduleSeat ScheduleSeat @relation( fields:[scheduleSeatId], references:[id], onDelete: Cascade)
 
   @@id([bookingId, scheduleSeatId])
 
@@ -686,11 +606,7 @@ model Payment {
 
   paidAt DateTime?
 
-  booking Booking
-      @relation(
-        fields:[bookingId],
-        references:[id]
-      )
+  booking Booking @relation(fields:[bookingId], references:[id] )
 
   refund Refund?
 
@@ -716,11 +632,7 @@ model Ticket {
 
   ticketStatus TicketStatus @default(ACTIVE)
 
-  booking Booking
-      @relation(
-        fields:[bookingId],
-        references:[id]
-      )
+  booking Booking @relation( fields:[bookingId], references:[id])
 
   createdAt DateTime @default(now())
 
@@ -742,11 +654,7 @@ model Refund {
 
   processedAt DateTime?
 
-  payment Payment
-      @relation(
-        fields:[paymentId],
-        references:[id]
-      )
+  payment Payment @relation( fields:[paymentId], references:[id]    )
 
   createdAt DateTime @default(now())
 
@@ -770,11 +678,7 @@ model Notification {
 
   sentAt DateTime?
 
-  passenger Passenger
-      @relation(
-        fields:[passengerId],
-        references:[id]
-      )
+  passenger Passenger @relation(fields:[passengerId],references:[id] )
 
   createdAt DateTime @default(now())
 
@@ -795,11 +699,7 @@ model AuditLog {
 
   ipAddress String?
 
-  user User
-      @relation(
-        fields:[userId],
-        references:[id]
-      )
+  user User @relation(fields:[userId],references:[id])
 
   createdAt DateTime @default(now())
 
